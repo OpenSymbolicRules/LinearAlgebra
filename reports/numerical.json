@@ -1,0 +1,13 @@
+{
+  "purpose": "numerical sanity checks; not formal verification",
+  "python": "3.13.7",
+  "seeds": [
+    20261123,
+    47,
+    81
+  ],
+  "test_groups_run": 4,
+  "failures": [],
+  "errors": [],
+  "successful": true
+}

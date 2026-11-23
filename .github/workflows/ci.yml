@@ -1,0 +1,26 @@
+name: Pilot checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prototype:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run numerical and shape-guard tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Produce numerical report
+        run: python3 tests/run_checks.py > numerical-report.json
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1.13'
+      - name: Install documentation dependencies
+        run: julia --project=docs -e 'using Pkg; Pkg.instantiate()'
+      - name: Build documentation
+        run: julia --project=docs docs/make.jl
