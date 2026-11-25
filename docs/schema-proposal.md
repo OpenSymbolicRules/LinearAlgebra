@@ -7,6 +7,10 @@ on a ruleset, rule and `OMV`; a proposed field is not valid there merely because
 it begins with `x-`. See [the v1 schema](https://github.com/OpenSymbolicRules/Specification/blob/eb12fb1/schemas/v1/ruleset.schema.json)
 and [the v1 requirements](https://github.com/OpenSymbolicRules/Specification/blob/eb12fb1/docs/osr-v1.md).
 
+The [six matrix examples](matrix-examples.md) exercise symbolic dimensions and
+forward rewrites in a single experimental envelope. They supply evidence for
+reviewing this proposal. The normative migration choice remains open.
+
 ## Proposed minimal contract
 
 1. Keep OSR rules and OpenMath expressions, with one portable `OMS` identity

@@ -3,12 +3,14 @@
 | Inventory | Count | Evidence |
 |---|---:|---|
 | Designed forward identities | 28 | All 28 have a hand-written mathematical counterpart compiled by Lean. |
+| Generated experimental examples | 6 of 28 | Typed terms supply both the proof statement and the OpenMath expressions. [Catalogue and checks](../docs/matrix-examples.md). |
 | False proposals | 6 | Lean checks a concrete witness for every proposal. |
-| Exported and certified OSR v1 rules | 0 | Typed OSR terms, audited symbol mappings and generated theorems are pending. |
+| Exported and certified OSR v1 rules | 0 | The official typed context, registry audit and independent Verification records are pending. |
 
 The four additional formulations below cover existing catalogue entries.
 The formal verification eligibility of the eventual v1 rules depends on
-their typed translation. Generation has not been attempted for any entry.
+the accepted typing and registry contract. The remaining 22 identities have
+hand-written mathematical proofs only.
 
 The matrix proofs cover rectangular trace cyclicity and preserve explicit
 invertibility hypotheses. Mathlib assigns a value to singular inverses, so
@@ -45,7 +47,8 @@ just lean OSR-Lean
 ```
 
 CI compiles the upstream mathematical statements and the pilot sources with
-warnings treated as errors. The five new theorem declarations also check
+warnings treated as errors. It also regenerates the six experimental examples
+and compares them byte-for-byte with the committed JSON. The five new theorem declarations also check
 their axiom lists. The [numerical report](numerical.json) records five
 deterministic test groups. Checking that a serialized rule and its assumptions
 denote the theorem still requires the typed OSR export and independent recheck.

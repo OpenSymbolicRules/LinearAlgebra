@@ -55,8 +55,9 @@ not proofs. `counterexample` is the v1 status corresponding to a UI label
 
 ## Candidate coverage and status
 
-All **28** linear-algebra design entries are currently `not generated` as OSR
-theorems; therefore none is certified as an OSR rule. Hand-written mathematical
+Six of the 28 entries use typed Lean operands and the pinned OSR OpenMath
+encoder in the [matrix examples](matrix-examples.md). Official v1 certification
+requires a reviewed typed registry and independent recheck. Hand-written mathematical
 counterparts compile, including the explicit inverse premises and commutation
 hypothesis; this does not complete the semantic bridge. The column determinant and Euclidean squared norm formulations compile in
 the standard oriented real coordinate space. Coordinate-free transport remains

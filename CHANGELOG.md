@@ -8,6 +8,9 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Six generated, typed OpenMath matrix examples linked to their Lean proofs,
+  with rectangular real and complex consumer tests and a byte comparison in CI.
+
 - A Lean counterexample to the unconditional exponential sum rule using the
   two nilpotent real matrices in the numerical suite.
 - Checked column-determinant and Euclidean norm formulations for the 3D

@@ -4,13 +4,12 @@ This pilot investigates portable, oriented rewrite rules for abstract matrices
 and vectors. OpenSymbolicRules is language-independent: a consumer need not
 use a particular computer algebra system or proof assistant.
 
-**Status: research and numerical prototype.** The 28 designed identities are
-not yet distributed as OSR rule files or certified by Lean. Lean checks mathematical counterparts for all 28 and concrete
-counterexamples to all six false proposals. See the [status report](reports/status.md).
-The current OSR v1
-schema cannot faithfully express the pilot's typed matrix contexts; the
-[proposal](docs/schema-proposal.md) is not an official specification change.
-Numerical checks are sanity checks, never mathematical proofs.
+The pilot contains [six typed matrix rewrite examples](docs/matrix-examples.md).
+Lean checks their directed equalities and generates the portable JSON from
+the same terms. The wider catalogue contains 28 identities with mathematical
+proofs and six false proposals with compiled counterexamples. Typed OSR v1
+certification requires an approved context and registry interpretation.
+See the [status report](reports/status.md) and [schema proposal](docs/schema-proposal.md).
 
 The [rule design](docs/rule-design.md) specifies dimensions, assumptions,
 orientation and six false proposals. [Reconnaissance](docs/recon.md) records

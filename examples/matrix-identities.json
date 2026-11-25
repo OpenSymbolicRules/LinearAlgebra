@@ -1,0 +1,152 @@
+{"rules":
+ [{"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}},
+     {"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.transpose_product",
+   "context":
+   {"variables":
+    {"B": {"rows": "n", "kind": "matrix", "columns": "p"},
+     "A": {"rows": "m", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"p": {"min": 1}, "n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}},
+     {"kind": "OMA",
+      "arguments": [{"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.transpose_sum",
+   "context":
+   {"variables":
+    {"B": {"rows": "m", "kind": "matrix", "columns": "n"},
+     "A": {"rows": "m", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []},
+  {"replacement": {"name": "A", "kind": "OMV"},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.transpose_twice",
+   "context":
+   {"variables": {"A": {"rows": "m", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"name": "A", "kind": "OMV"},
+     {"kind": "OMA",
+      "arguments": [{"name": "B", "kind": "OMV"}, {"name": "C", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+     {"name": "C", "kind": "OMV"}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.multiply_associative",
+   "context":
+   {"variables":
+    {"C": {"rows": "p", "kind": "matrix", "columns": "q"},
+     "B": {"rows": "n", "kind": "matrix", "columns": "p"},
+     "A": {"rows": "m", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions":
+    {"q": {"min": 1}, "p": {"min": 1}, "n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+     {"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "C", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"name": "A", "kind": "OMV"},
+     {"kind": "OMA",
+      "arguments": [{"name": "B", "kind": "OMV"}, {"name": "C", "kind": "OMV"}],
+      "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.distribute_left",
+   "context":
+   {"variables":
+    {"C": {"rows": "n", "kind": "matrix", "columns": "p"},
+     "B": {"rows": "n", "kind": "matrix", "columns": "p"},
+     "A": {"rows": "m", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"p": {"min": 1}, "n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "C", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+     {"kind": "OMA",
+      "arguments": [{"name": "B", "kind": "OMV"}, {"name": "C", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}},
+     {"name": "C", "kind": "OMV"}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.distribute_right",
+   "context":
+   {"variables":
+    {"C": {"rows": "n", "kind": "matrix", "columns": "p"},
+     "B": {"rows": "m", "kind": "matrix", "columns": "n"},
+     "A": {"rows": "m", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"p": {"min": 1}, "n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []}],
+ "profile": "linear_algebra.matrix_examples/0.1.0"}
