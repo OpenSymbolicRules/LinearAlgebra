@@ -1,41 +1,51 @@
 # Pilot status
 
-The inventory contains 28 proposed directed identities and six proposed false
-rules. It is not yet an exported OSR ruleset. All OSR certification statuses
-are pending: no typed OSR terms, generated theorems or audited mappings exist
-for this pilot, so none of the 28 is classified as OSR-proved or OSR-refuted.
-The formal-verification eligibility proportion cannot yet be determined.
+| Inventory | Count | Evidence |
+|---|---:|---|
+| Designed forward identities | 28 | All 28 have a hand-written mathematical counterpart compiled by Lean. |
+| False proposals | 6 | Lean checks a concrete witness for every proposal. |
+| Exported and certified OSR v1 rules | 0 | Typed OSR terms, audited symbol mappings and generated theorems are pending. |
 
-As a preliminary Mathlib investigation, 28 corresponding hand-written
-mathematical statements compile with Lean 4.35.0 and Mathlib revision
-`56a005855ea17e0b0958f73ec801ae140b0a1679`. The source is
-[`Lean/OSRTest/LinearAlgebraPilot.lean`](https://github.com/OpenSymbolicRules/Lean/blob/22cf025/OSRTest/LinearAlgebraPilot.lean).
-These are not generated
-OSR theorems: they establish neither CD semantics nor an OSR translation.
-The checked matrix cases include rectangular trace cyclicity and explicit
-invertibility assumptions. Mathlib totalizes singular matrix inverse to zero;
-the hypotheses are retained even when a Mathlib lemma holds more generally.
+The four additional formulations below cover existing catalogue entries.
+The formal verification eligibility of the eventual v1 rules depends on
+their typed translation. Generation has not been attempted for any entry.
 
-The cross-product statements use the standard coordinate model; Lagrange's
-identity is written using dot products, and the scalar triple product uses a
-matrix of rows. Correspondence to the intended intrinsic, norm and column
-formulations requires review. The exponential statements are checked over the
-reals; the numerical suite does not cover complex matrices.
+The matrix proofs cover rectangular trace cyclicity and preserve explicit
+invertibility hypotheses. Mathlib assigns a value to singular inverses, so
+those hypotheses matter when translating a rule for a CAS. Five concrete
+counterexamples, including the invertible witness for inverse product order,
+reside in the same pinned OSR project as the original 28 statements.
+[Identities](https://github.com/OpenSymbolicRules/Lean/blob/22cf025/OSRTest/LinearAlgebraPilot.lean)
+and [five counterexamples](https://github.com/OpenSymbolicRules/Lean/blob/22cf025/OSRTest/LinearAlgebraCounterexamples.lean).
 
-Five of the six proposed false formulas have compiled concrete Lean
-counterexamples in [`Lean/OSRTest/LinearAlgebraCounterexamples.lean`](https://github.com/OpenSymbolicRules/Lean/blob/22cf025/OSRTest/LinearAlgebraCounterexamples.lean); the
-inverse example separately proves that both witness matrices are invertible.
-The noncommuting exponential counterexample has a numerical witness but no
-Lean proof yet. These counterexamples are mathematical checks, not exported
-OSR refutation records.
-The [numerical test report](numerical.json) records four test groups; it is not
-a proof and does not test OSR serialization. The next tasks are proof coverage,
-typed interpretation and an audited export/recheck path under the existing OSR
-verification architecture. A successful hand-written proof must not be
-reported as an OSR rule certification.
+V3 uses the determinant of three **columns**. V6 uses the Euclidean norm
+and real inner product on standard oriented ℝ³. Extending the coordinate
+proofs to an arbitrary oriented Euclidean space requires transport by an
+orientation-preserving isometry. E1 and E2 now have both real and complex
+matrix proofs. E2 retains the explicit hypothesis `Commute A B`.
+[Additional formulations](https://github.com/OpenSymbolicRules/LinearAlgebra/blob/main/verification/PilotFormulations.lean).
 
-The prototype CI runs the numerical and limited shape-guard tests and builds
-the documentation. It does not yet generate OSR theorems or independently
-recheck the Lean statements. Those gates cannot be claimed until the typed
-rule format, semantic registry and existing export/recheck pipeline support
-the pilot.
+For the sixth false proposal, the proof uses the two real matrices in the
+numerical suite. Both square to zero. Their individual exponentials multiply
+to a matrix that fails to commute with their sum, whereas the exponential of
+the sum commutes with its argument. The contradiction uses exact arithmetic.
+[Exponential counterexample](https://github.com/OpenSymbolicRules/LinearAlgebra/blob/main/verification/MatrixExponential.lean).
+
+## Reproduce the checks
+
+From this repository, with elan, Git and Python available, run the following
+commands in a shell. The pinned OSR checkout supplies the Lake project,
+Lean 4.35.0 and Mathlib revision `56a005855ea17e0b0958f73ec801ae140b0a1679`.
+
+```sh
+git clone https://github.com/OpenSymbolicRules/Lean.git OSR-Lean
+git -C OSR-Lean checkout --detach "$(cat verification/lean-revision)"
+(cd OSR-Lean && lake exe cache get)
+just lean OSR-Lean
+```
+
+CI compiles the upstream mathematical statements and the pilot sources with
+warnings treated as errors. The five new theorem declarations also check
+their axiom lists. The [numerical report](numerical.json) records five
+deterministic test groups. Checking that a serialized rule and its assumptions
+denote the theorem still requires the typed OSR export and independent recheck.

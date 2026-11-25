@@ -8,6 +8,13 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- A Lean counterexample to the unconditional exponential sum rule using the
+  two nilpotent real matrices in the numerical suite.
+- Checked column-determinant and Euclidean norm formulations for the 3D
+  vector rules and complex versions of both matrix exponential identities.
+- A CI check and `just lean` command that compile the mathematical sources
+  against the pinned OpenSymbolicRules/Lean project.
+
 - Research and design for abstract matrix and vector rewrite rules, OSR schema
   compatibility, Mathlib mapping and future mathematical domains.
 - Deterministic numerical sanity checks for 28 proposed identities and six

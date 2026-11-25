@@ -24,3 +24,26 @@ jobs:
         run: julia --project=docs -e 'using Pkg; Pkg.instantiate()'
       - name: Build documentation
         run: julia --project=docs docs/make.jl
+
+  lean:
+    name: Check mathematical statements with pinned OSR Lean
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: pin
+        run: echo "revision=$(cat verification/lean-revision)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: OpenSymbolicRules/Lean
+          ref: ${{ steps.pin.outputs.revision }}
+          path: OSR-Lean
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Fetch compiled imports from the pinned Mathlib
+        working-directory: OSR-Lean
+        run: |
+          awk '$1 == "import" { print $2 }' OSRTest/LinearAlgebra{Pilot,Counterexamples}.lean ../verification/*.lean | sort -u | xargs lake exe cache get
+      - name: Compile identities and counterexamples
+        run: bash verification/check.sh OSR-Lean

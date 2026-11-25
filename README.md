@@ -5,8 +5,8 @@ and vectors. OpenSymbolicRules is language-independent: a consumer need not
 use a particular computer algebra system or proof assistant.
 
 **Status: research and numerical prototype.** The 28 designed identities are
-not yet distributed as OSR rule files or certified by Lean. Some corresponding
-hand-written Mathlib statements have been checked; see [status](reports/status.md).
+not yet distributed as OSR rule files or certified by Lean. Lean checks mathematical counterparts for all 28 and concrete
+counterexamples to all six false proposals. See the [status report](reports/status.md).
 The current OSR v1
 schema cannot faithfully express the pilot's typed matrix contexts; the
 [proposal](docs/schema-proposal.md) is not an official specification change.
@@ -25,5 +25,5 @@ or `just report` for a machine-readable test report. No third-party Python
 dependency is needed. The tests include an experimental guard for a small
 OpenMath fragment; it is not a complete OSR rule validator or matcher. Build
 the documentation with `julia --project=docs -e 'using Pkg; Pkg.instantiate()'`
-followed by `just docs`. The pinned Lean and Mathlib versions are those of the
-existing OSR Lean project; no independent proof pipeline is claimed here.
+followed by `just docs`. To reproduce the Lean checks, see the checkout and
+`just lean` commands in the [status report](reports/status.md).

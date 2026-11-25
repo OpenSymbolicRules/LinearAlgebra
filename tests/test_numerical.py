@@ -1,5 +1,6 @@
 """Deterministic sanity checks for the proposed identities, not formal proofs."""
 
+import cmath
 import math
 import random
 import unittest
@@ -15,7 +16,7 @@ class NumericalIdentities(unittest.TestCase):
             for x, y in zip(a, b):
                 self.assertClose(x, y)
         else:
-            self.assertTrue(math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-9),
+            self.assertTrue(cmath.isclose(a, b, rel_tol=1e-9, abs_tol=1e-9),
                             f"{a!r} != {b!r}")
 
     def test_square_matrix_rules(self):
@@ -64,6 +65,13 @@ class NumericalIdentities(unittest.TestCase):
             self.assertClose(trace(matmul(a, b)), trace(matmul(b, a)))
             self.assertClose(transpose(matmul(a, b)), matmul(transpose(b), transpose(a)))
 
+    def test_complex_exponentials(self):
+        a = [[0.25j, 0.125], [0, 0.25j]]
+        b = add(scale(-0.5j, a), scale(0.25, eye(2)))
+        self.assertClose(matmul(a, b), matmul(b, a))
+        self.assertClose(expm(scale(0, a)), eye(2))
+        self.assertClose(expm(add(a, b)), matmul(expm(a), expm(b)))
+
     def test_vector_rules(self):
         rng = random.Random(81)
         for _ in range(12):
@@ -75,8 +83,8 @@ class NumericalIdentities(unittest.TestCase):
                              vecadd(vecscale(dot(u, w), v), vecscale(-dot(u, v), w)))
             self.assertClose(vecadd(vecadd(cross(u, cross(v, w)), cross(v, cross(w, u))),
                                     cross(w, cross(u, v))), [0, 0, 0])
-            self.assertClose(dot(cross(u, v), cross(u, v)),
-                             dot(u, u) * dot(v, v) - dot(u, v) ** 2)
+            self.assertClose(math.hypot(*cross(u, v)) ** 2,
+                             math.hypot(*u) ** 2 * math.hypot(*v) ** 2 - dot(u, v) ** 2)
 
     def test_invalid_shapes_and_false_rules(self):
         with self.assertRaises(ValueError):

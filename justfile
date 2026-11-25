@@ -6,3 +6,7 @@ report:
 
 docs:
     julia --project=docs docs/make.jl
+
+# Compile mathematical witnesses in the pinned OSR Lean project.
+lean project:
+    bash verification/check.sh "{{project}}"

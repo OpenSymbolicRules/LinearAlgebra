@@ -34,8 +34,8 @@ is scalar-only, so matrix powers require a separate reviewed typed mapping.
 
 Exactly **28 independent mathematical identities / 28 proposed directed
 entries** follow: transpose 5, trace 4, determinant 5, inverse 3, vectors 6,
-matrix exponential 2, associativity/distribution 3. All are **not generated,
-unproved in this pilot**, including those with an existing Mathlib candidate.
+matrix exponential 2, associativity/distribution 3. Each entry still needs a typed OSR encoding. Compiled mathematical counterparts
+are listed in the [status report](../reports/status.md).
 The alternate orientation `(A^T)⁻¹ → (A⁻¹)^T` is the reverse of T5 and is
 not a 29th identity; enabling both would create a loop. Existing proofs in
 Mathlib would not by themselves prove a faithful OSR-to-Lean mapping.
@@ -82,20 +82,16 @@ cross-domain conceptual examples has its own positive and negative tests in
 
 ## Six false candidates and exact witnesses
 
-The following are design witnesses, **not a numerical test suite or Lean
-counterexamples**. A one-off deterministic Python standard-library arithmetic
-probe reproduced the five exact matrix inequalities and the displayed
-floating-point exponential values; it is not a proof or a general numerical
-validation of the proposed rules. They must be translated into `refuted/`
-only after approval.
-Each universal proposal is falsified by exhibiting its one valid instance.
+The [counterexample catalogue](../refuted/README.md) links the compiled
+Lean witnesses for these six proposals. Each witness satisfies the stated
+domain and makes the two sides unequal.
 
 1. **Square expansion:** take `A=[[0,1],[0,0]]`, `B=[[0,0],[1,0]]`.
    Then `(A+B)^2=I`, but `A²+2AB+B²=diag(2,0)`. The missing term is `BA`.
 2. **Unconditional exponential:** use the same `A,B`. Since `A²=B²=0`,
    `exp(A)exp(B)=[[2,1],[1,1]]`, whereas `exp(A+B)` has diagonal
    `cosh(1)` and off-diagonal `sinh(1)` (approximately 1.543081 and
-   1.175201). The matrices do not commute; this is not a formal check.
+   1.175201). The exact Lean proof uses commutation with the sum to distinguish the two sides.
 3. **Determinant of a sum:** for `A=B=I₂`, `det(A+B)=4` and
    `det(A)+det(B)=2`.
 4. **Incorrect scalar determinant:** for `A=I₂`, `k=2`, `det(kA)=4` but
@@ -106,19 +102,12 @@ Each universal proposal is falsified by exhibiting its one valid instance.
 6. **Multiplicative trace:** for `A=B=I₂`, `tr(AB)=2` whereas
    `tr(A)tr(B)=4`.
 
-All witnesses have exact rational entries; a future deterministic numerical
-runner should independently reproduce them, use a tolerance and documented
-error control for exponentials, and generate exact Lean counterexamples where
-feasible. Numerical evaluation never counts as proof. Six is the refutation
-inventory count, not six verified counterexamples.
+All witness entries are rational. The numerical suite exercises each witness
+and the Lean proofs establish the six inequalities exactly.
 
 ## Phase-2 report
 
-Completed: 28 proposed directed identities, six false proposals with concrete
-witnesses, assumptions, dimensions and rewrite orientation. The six witnesses
-were checked once by the standard-library arithmetic probe described above.
-Formal state: **0 generated, 0 proved, 0 refuted by Lean, no rule test suite**;
-all 28 are design-only, and formal eligibility is **not yet assessable**
-until types, vocabulary and mapping are accepted. Tests in the tables are
-specifications, not claims of execution. Review the choice of algebraic
-structures, profile orientation and CD mappings before approving implementation.
+The design specifies dimensions, assumptions and orientations for 28 directed
+identities. Six further proposals have concrete counterexamples. Reviewing
+the typed vocabulary and its interpretation is the next step toward an OSR
+export. The [status report](../reports/status.md) tracks proof coverage.
