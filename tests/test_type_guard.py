@@ -41,6 +41,31 @@ class ShapeGuardTests(unittest.TestCase):
         with self.assertRaises(ContextError):
             infer(call('arith1', 'plus', var('A'), var('B')), self.context)
 
+    def test_determinant_requires_square_matrix(self):
+        expr = call('linalg1', 'determinant', var('A'))
+        self.assertEqual(infer(expr, {'A': ('matrix', 'n', 'n')}), ('scalar',))
+        for declaration in [('matrix', 2, 3), ('matrix', 'm', 'n'), ('scalar',), ('vector', 3)]:
+            with self.subTest(declaration=declaration), self.assertRaises(ContextError):
+                infer(expr, {'A': declaration})
+
+    def test_dimension_arguments(self):
+        ident = lambda size: call('linalg5', 'identity', size)
+        power = lambda size: call('arith1', 'power', var('k'), size)
+        self.assertEqual(infer(ident(var('n')), {}, {'n'}), ('matrix', 'n', 'n'))
+        self.assertEqual(infer(ident({'kind': 'OMI', 'integer': 3}), {}), ('matrix', 3, 3))
+        self.assertEqual(infer(power(var('n')), self.context, {'n'}), ('scalar',))
+        for constructor in (ident, power):
+            for arg in (var('undeclared'), var('k'), {'kind': 'OMI', 'integer': 0},
+                        {'kind': 'OMI', 'integer': -2}, {'kind': 'OMI', 'integer': True}):
+                with self.subTest(arg=arg), self.assertRaises(ContextError):
+                    infer(constructor(arg), self.context, {'n'})
+        with self.assertRaises(ContextError):
+            infer(ident(var('n')), {'n': ('scalar',)}, {'n'})
+        with self.assertRaises(ContextError):
+            infer(call('arith1', 'power', var('A'), var('n')), self.context, {'m', 'n'})
+        with self.assertRaises(ContextError):
+            infer(call('linalg1', 'determinant', var('A')), {'A': ('matrix', 'n', 'n')}, {'m'})
+
     def test_order_is_significant(self):
         self.assertEqual(infer(call('arith1', 'times', var('A'), var('B')), self.context),
                          ('matrix', 'm', 'p'))

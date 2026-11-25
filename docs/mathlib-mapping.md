@@ -55,7 +55,7 @@ not proofs. `counterexample` is the v1 status corresponding to a UI label
 
 ## Candidate coverage and status
 
-Six of the 28 entries use typed Lean operands and the pinned OSR OpenMath
+Eleven of the 28 entries use typed Lean operands and the pinned OSR OpenMath
 encoder in the [matrix examples](matrix-examples.md). Official v1 certification
 requires a reviewed typed registry and independent recheck. Hand-written mathematical
 counterparts compile, including the explicit inverse premises and commutation

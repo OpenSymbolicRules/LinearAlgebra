@@ -8,6 +8,11 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Experimental matrix profile 0.2.0 adds five typed rewrites for transposition
+  of a scalar multiple and determinants of products, transposes, scalar multiples
+  and identity matrices. The consumer checks square shapes and positive dimension
+  arguments, including the exponent in the scalar determinant rule.
+
 - Six generated, typed OpenMath matrix examples linked to their Lean proofs,
   with rectangular real and complex consumer tests and a byte comparison in CI.
 

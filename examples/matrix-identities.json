@@ -148,5 +148,114 @@
      "A": {"rows": "m", "kind": "matrix", "columns": "n"}},
     "scalar_domains": ["setname1#R", "setname1#C"],
     "dimensions": {"p": {"min": 1}, "n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"name": "k", "kind": "OMV"},
+     {"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "k", "kind": "OMV"}, {"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.transpose_scalar",
+   "context":
+   {"variables":
+    {"k": {"kind": "scalar"},
+     "A": {"rows": "m", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"n": {"min": 1}, "m": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}},
+     {"kind": "OMA",
+      "arguments": [{"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}, {"name": "B", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.determinant_product",
+   "context":
+   {"variables":
+    {"B": {"rows": "n", "kind": "matrix", "columns": "n"},
+     "A": {"rows": "n", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"n": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments": [{"name": "A", "kind": "OMV"}],
+    "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "transpose", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.determinant_transpose",
+   "context":
+   {"variables": {"A": {"rows": "n", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"n": {"min": 1}}},
+   "conditions": []},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "k", "kind": "OMV"}, {"name": "n", "kind": "OMV"}],
+      "applicant": {"name": "power", "kind": "OMS", "cd": "arith1"}},
+     {"kind": "OMA",
+      "arguments": [{"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "k", "kind": "OMV"}, {"name": "A", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.determinant_scalar",
+   "context":
+   {"variables":
+    {"k": {"kind": "scalar"},
+     "A": {"rows": "n", "kind": "matrix", "columns": "n"}},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"n": {"min": 1}}},
+   "conditions": []},
+  {"replacement": {"kind": "OMI", "integer": 1},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "n", "kind": "OMV"}],
+      "applicant": {"name": "identity", "kind": "OMS", "cd": "linalg5"}}],
+    "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.determinant_identity",
+   "context":
+   {"variables": {},
+    "scalar_domains": ["setname1#R", "setname1#C"],
+    "dimensions": {"n": {"min": 1}}},
    "conditions": []}],
- "profile": "linear_algebra.matrix_examples/0.1.0"}
+ "profile": "linear_algebra.matrix_examples/0.2.0"}

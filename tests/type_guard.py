@@ -27,15 +27,36 @@ def _checked_type(value):
     return value
 
 
-def infer(expr, context):
+def _dimension(expr, context, dimensions):
+    if isinstance(expr, dict):
+        if set(expr) == {'kind', 'name'} and expr['kind'] == 'OMV':
+            name = expr['name']
+            if isinstance(name, str) and dimensions is not None and name in dimensions and name not in context:
+                return name
+        if set(expr) == {'kind', 'integer'} and expr['kind'] == 'OMI':
+            value = expr['integer']
+            if type(value) is int and value > 0:
+                return value
+    raise ContextError('expected a declared dimension or positive integer size')
+
+
+def infer(expr, context, dimensions=None):
     """Return a declared or derived shape; reject unknown constructs."""
     if not isinstance(expr, dict):
         raise ContextError('expected an OpenMath expression object')
+    if set(expr) == {'kind', 'integer'} and expr.get('kind') == 'OMI':
+        if type(expr['integer']) is not int:
+            raise ContextError('invalid integer literal')
+        return ('scalar',)
     if expr.get('kind') == 'OMV' and set(expr) == {'kind', 'name'}:
         name = expr['name']
-        if not isinstance(name, str) or name not in context:
-            raise ContextError('undeclared variable')
-        return _checked_type(context[name])
+        if not isinstance(name, str) or name not in context or (dimensions is not None and name in dimensions):
+            raise ContextError('undeclared or ambiguous variable')
+        shape = _checked_type(context[name])
+        if dimensions is not None and any(isinstance(d, str) and
+                                          (d not in dimensions or d in context) for d in shape[1:]):
+            raise ContextError('undeclared or ambiguous shape dimension')
+        return shape
     if expr.get('kind') != 'OMA' or set(expr) != {'kind', 'applicant', 'arguments'}:
         raise ContextError('unsupported expression')
     op, args = expr['applicant'], expr['arguments']
@@ -43,13 +64,26 @@ def infer(expr, context):
             or op['kind'] != 'OMS' or not isinstance(args, list)):
         raise ContextError('invalid application')
     symbol = (op['cd'], op['name'])
+    if symbol == ('linalg5', 'identity') and len(args) == 1:
+        size = _dimension(args[0], context, dimensions)
+        return ('matrix', size, size)
+    if symbol == ('arith1', 'power') and len(args) == 2:
+        if infer(args[0], context, dimensions) != ('scalar',):
+            raise ContextError('expected a scalar power base')
+        _dimension(args[1], context, dimensions)
+        return ('scalar',)
+    if symbol == ('linalg1', 'determinant') and len(args) == 1:
+        operand = infer(args[0], context, dimensions)
+        if operand[0] != 'matrix' or operand[1] != operand[2]:
+            raise ContextError('determinant requires a square matrix')
+        return ('scalar',)
     if symbol == ('linalg1', 'transpose') and len(args) == 1:
-        operand = infer(args[0], context)
+        operand = infer(args[0], context, dimensions)
         if operand[0] != 'matrix':
             raise ContextError('transpose requires a matrix')
         return ('matrix', operand[2], operand[1])
     if symbol in (('arith1', 'plus'), ('arith1', 'times')) and len(args) == 2:
-        a, b = (infer(arg, context) for arg in args)
+        a, b = (infer(arg, context, dimensions) for arg in args)
         if symbol[1] == 'plus':
             if a != b:
                 raise ContextError('addition requires identical types')
@@ -66,7 +100,7 @@ def infer(expr, context):
     raise ContextError('unknown symbol or unsupported arity')
 
 
-def validate_equality(lhs, rhs, context):
-    if infer(lhs, context) != infer(rhs, context):
+def validate_equality(lhs, rhs, context, dimensions=None):
+    if infer(lhs, context, dimensions) != infer(rhs, context, dimensions):
         raise ContextError('sides have different types')
     return True

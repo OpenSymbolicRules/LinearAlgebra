@@ -5,29 +5,50 @@ import random
 import unittest
 from pathlib import Path
 
-from numerical import add, matmul, transpose
+from numerical import add, det, eye, matmul, scale, transpose
 from type_guard import ContextError, infer, validate_equality
 
 
 EXAMPLES = Path(__file__).resolve().parents[1] / 'examples' / 'matrix-identities.json'
-SYMBOLS = {('arith1', 'times'): ('mul', matmul),
+
+
+def product(a, b):
+    if isinstance(a, list):
+        return matmul(a, b) if isinstance(b, list) else scale(b, a)
+    if isinstance(b, list):
+        return scale(a, b)
+    return a * b
+
+
+SYMBOLS = {('arith1', 'times'): ('mul', product),
+           ('arith1', 'power'): ('pow', pow),
+           ('linalg1', 'determinant'): ('det', det),
+           ('linalg5', 'identity'): ('I', eye),
            ('arith1', 'plus'): ('add', add),
            ('linalg1', 'transpose'): ('T', transpose)}
+
 # Catalogue orientation, including the order in every matrix product.
 CASES = {
-    'transpose_product': ([('m', 'n'), ('n', 'p')], 'T(mul(A,B))', 'mul(T(B),T(A))', ('p', 'm')),
-    'transpose_sum': ([('m', 'n'), ('m', 'n')], 'T(add(A,B))', 'add(T(A),T(B))', ('n', 'm')),
-    'transpose_twice': ([('m', 'n')], 'T(T(A))', 'A', ('m', 'n')),
-    'multiply_associative': ([('m', 'n'), ('n', 'p'), ('p', 'q')],
+    'transpose_scalar': ({'k': (), 'A': ('m', 'n')}, 'T(mul(k,A))', 'mul(k,T(A))', ('n', 'm')),
+    'determinant_product': ({'A': ('n', 'n'), 'B': ('n', 'n')}, 'det(mul(A,B))', 'mul(det(A),det(B))', ()),
+    'determinant_transpose': ({'A': ('n', 'n')}, 'det(T(A))', 'det(A)', ()),
+    'determinant_scalar': ({'k': (), 'A': ('n', 'n')}, 'det(mul(k,A))', 'mul(pow(k,n),det(A))', ()),
+    'determinant_identity': ({}, 'det(I(n))', '1', ()),
+    'transpose_product': ({'A': ('m', 'n'), 'B': ('n', 'p')}, 'T(mul(A,B))', 'mul(T(B),T(A))', ('p', 'm')),
+    'transpose_sum': ({'A': ('m', 'n'), 'B': ('m', 'n')}, 'T(add(A,B))', 'add(T(A),T(B))', ('n', 'm')),
+    'transpose_twice': ({'A': ('m', 'n')}, 'T(T(A))', 'A', ('m', 'n')),
+    'multiply_associative': ({'A': ('m', 'n'), 'B': ('n', 'p'), 'C': ('p', 'q')},
                              'mul(mul(A,B),C)', 'mul(A,mul(B,C))', ('m', 'q')),
-    'distribute_left': ([('m', 'n'), ('n', 'p'), ('n', 'p')],
+    'distribute_left': ({'A': ('m', 'n'), 'B': ('n', 'p'), 'C': ('n', 'p')},
                         'mul(A,add(B,C))', 'add(mul(A,B),mul(A,C))', ('m', 'p')),
-    'distribute_right': ([('m', 'n'), ('m', 'n'), ('n', 'p')],
+    'distribute_right': ({'A': ('m', 'n'), 'B': ('m', 'n'), 'C': ('n', 'p')},
                          'mul(add(A,B),C)', 'add(mul(A,C),mul(B,C))', ('m', 'p')),
 }
 
 
 def read_term(term, values):
+    if term['kind'] == 'OMI':
+        return str(term['integer']), term['integer']
     if term['kind'] == 'OMV':
         name = term['name']
         return name, values[name]
@@ -41,7 +62,7 @@ def read_term(term, values):
 class MatrixExamples(unittest.TestCase):
     def test_portable_terms(self):
         payload = json.loads(EXAMPLES.read_text())
-        self.assertEqual(payload['profile'], 'linear_algebra.matrix_examples/0.1.0')
+        self.assertEqual(payload['profile'], 'linear_algebra.matrix_examples/0.2.0')
         rules = payload['rules']
         self.assertCountEqual([r['id'] for r in rules],
                               ['linear_algebra.' + name for name in CASES])
@@ -52,23 +73,41 @@ class MatrixExamples(unittest.TestCase):
                 self.assertEqual(rule['conditions'], [])
                 ctx = rule['context']
                 self.assertEqual(ctx['scalar_domains'], ['setname1#R', 'setname1#C'])
-                shapes = {name: (v['kind'], v['rows'], v['columns'])
-                          for name, v in ctx['variables'].items()}
-                dims = {d for _, rows, cols in shapes.values() for d in (rows, cols)}
+                key = rule['id'].removeprefix('linear_algebra.')
+                inputs, left, right, result_shape = CASES[key]
+                shapes = {}
+                for name, decl in ctx['variables'].items():
+                    if decl == {'kind': 'scalar'}:
+                        shapes[name] = ('scalar',)
+                    else:
+                        self.assertEqual(set(decl), {'kind', 'rows', 'columns'})
+                        shapes[name] = (decl['kind'], decl['rows'], decl['columns'])
+                expected_inputs = {name: ('matrix', *axes) if axes else ('scalar',)
+                                   for name, axes in inputs.items()}
+                self.assertEqual(shapes, expected_inputs)
+                dims = {dim for axes in inputs.values() for dim in axes}
+                if key == 'determinant_identity':
+                    dims.add('n')
                 self.assertEqual(ctx['dimensions'], {d: {'min': 1} for d in dims})
                 lhs, rhs = rule['pattern'], rule['replacement']
-                inputs, left, right, result_shape = CASES[rule['id'].removeprefix('linear_algebra.')]
-                self.assertEqual(shapes, {name: ('matrix', *dims)
-                                          for name, dims in zip('ABC', inputs)})
-                self.assertTrue(validate_equality(lhs, rhs, shapes))
-                self.assertEqual(infer(lhs, shapes), ('matrix', *result_shape))
-                for complex_entries in (False, True):
-                    sizes = dict(m=2, n=3, p=4, q=5)
+                self.assertTrue(validate_equality(lhs, rhs, shapes, dims))
+                expected = ('matrix', *result_shape) if result_shape else ('scalar',)
+                self.assertEqual(infer(lhs, shapes, dims), expected)
+                for n, k in ((1, 2), (2, -2), (3, 1+2j), (4, 0), (4, 2)):
+                    sizes = dict(m=2, n=n, p=4, q=5)
                     def entry():
                         real = rng.randint(-3, 3)
-                        return complex(real, rng.randint(-3, 3)) if complex_entries else real
-                    values = {k: [[entry() for _ in range(sizes[c])] for _ in range(sizes[r])]
-                              for k, (_, r, c) in shapes.items()}
+                        return complex(real, rng.randint(-3, 3)) if isinstance(k, complex) else real
+                    values = {d: sizes[d] for d in dims}
+                    for name, shape in shapes.items():
+                        if shape == ('scalar',):
+                            values[name] = k
+                        else:
+                            values[name] = [[entry() for _ in range(sizes[shape[2]])]
+                                            for _ in range(sizes[shape[1]])]
+                    if n == 4 and k == 2 and 'A' in values:
+                        # Include a singular witness for each square-matrix formula.
+                        values['A'][0] = [0] * len(values['A'][0])
                     ltext, lval = read_term(lhs, values)
                     rtext, rval = read_term(rhs, values)
                     self.assertEqual((ltext, rtext), (left, right))
