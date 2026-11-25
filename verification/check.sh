@@ -29,3 +29,5 @@ actual=$(mktemp)
 trap 'rm -f -- "$actual"' EXIT
 lake env lean -DwarningAsError=true --run "$proofs/MatrixExamples.lean" > "$actual"
 diff -u "$proofs/../examples/matrix-identities.json" "$actual"
+lake env lean -DwarningAsError=true --run "$proofs/VectorExamples.lean" > "$actual"
+diff -u "$proofs/../examples/vector-identities.json" "$actual"

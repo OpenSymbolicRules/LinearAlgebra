@@ -24,3 +24,21 @@ say the sum is *a* symmetric matrix. Confirm the interpretation and any
 OpenMath binding convention with the upstream maintainers before reporting or
 using that FMP as an obligation. `linalg5#symmetric` is a constructor, not a
 predicate. Do not classify this note as a formal proof or an upstream fix.
+
+## Vector dictionary observations
+
+- In `norm1` v1 revision 2, the description and the first application in the
+  FMP identify a unary Euclidean norm. The remainder of the equality lists
+  the `L_norm` symbol, 2 and the vector separately. Comparison with the
+  description suggests an omitted application around those last three objects.
+  [CD definition](https://openmath.org/cd/norm1.html#Euclidean_norm).
+- In `linalg4vec` v2 revision 1, the first two matrix multiplication properties
+  of `zero` interchange the row and column dimensions. For a 2×3 matrix
+  the matrix-times-column product needs a length-three vector and returns a
+  length-two vector. The profile uses only the unary zero-vector constructor.
+  [CD definition](https://openmath.org/cd/linalg4vec.html#zero).
+- In `linalg3` v3 revision 1 the matrix constructor takes matrix columns. Its
+  STS signature instead names `MatrixRow`, and the standalone vector signature
+  returns `Vector`. The vector profile constructs columns with outer products.
+  [CD definition](https://openmath.org/cd/linalg3.html#matrix) and
+  [STS signature](https://openmath.org/sts/linalg3.sts).

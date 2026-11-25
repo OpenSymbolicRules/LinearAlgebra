@@ -56,7 +56,10 @@ not proofs. `counterexample` is the v1 status corresponding to a UI label
 ## Candidate coverage and status
 
 Eleven of the 28 entries use typed Lean operands and the pinned OSR OpenMath
-encoder in the [matrix examples](matrix-examples.md). Official v1 certification
+encoder in the [matrix examples](matrix-examples.md). Six more interpret the
+exported OpenMath trees directly in standard oriented ℝ³. The column-matrix
+proof uses `Matrix.vecMulVec` and `Matrix.det_transpose`; the norm proof uses
+`WithLp.toLp 2` to supply the Euclidean norm. See the [vector examples](vector-examples.md). Official v1 certification
 requires a reviewed typed registry and independent recheck. Hand-written mathematical
 counterparts compile, including the explicit inverse premises and commutation
 hypothesis; this does not complete the semantic bridge. The column determinant and Euclidean squared norm formulations compile in

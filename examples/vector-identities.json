@@ -1,0 +1,268 @@
+{"rules":
+ [{"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments": [{"name": "v", "kind": "OMV"}, {"name": "u", "kind": "OMV"}],
+      "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "unary_minus", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments": [{"name": "u", "kind": "OMV"}, {"name": "v", "kind": "OMV"}],
+    "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.cross_anticommutative",
+   "context":
+   {"variables":
+    {"v": {"kind": "vector", "dimension": 3},
+     "u": {"kind": "vector", "dimension": 3}},
+    "space":
+    {"orientation": "right_handed",
+     "metric": "euclidean",
+     "dimension": 3,
+     "coordinates": "standard_orthonormal_basis"},
+    "scalar_domains": ["setname1#R"]},
+   "conditions": [],
+   "application_guard":
+   {"less": "v", "kind": "strict_variable_name_order", "greater": "u"}},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments": [{"kind": "OMI", "integer": 3}],
+    "applicant": {"name": "zero", "kind": "OMS", "cd": "linalg4vec"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments": [{"name": "u", "kind": "OMV"}, {"name": "u", "kind": "OMV"}],
+    "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.cross_self",
+   "context":
+   {"variables": {"u": {"kind": "vector", "dimension": 3}},
+    "space":
+    {"orientation": "right_handed",
+     "metric": "euclidean",
+     "dimension": 3,
+     "coordinates": "standard_orthonormal_basis"},
+    "scalar_domains": ["setname1#R"]},
+   "conditions": [],
+   "application_guard": null},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments":
+      [{"kind": "OMA",
+        "arguments":
+        [{"kind": "OMA",
+          "arguments":
+          [{"name": "u", "kind": "OMV"},
+           {"kind": "OMA",
+            "arguments":
+            [{"kind": "OMI", "integer": 1},
+             {"kind": "OMI", "integer": 0},
+             {"kind": "OMI", "integer": 0}],
+            "applicant": {"name": "vector", "kind": "OMS", "cd": "linalg3"}}],
+          "applicant":
+          {"name": "outerproduct", "kind": "OMS", "cd": "linalg1"}},
+         {"kind": "OMA",
+          "arguments":
+          [{"name": "v", "kind": "OMV"},
+           {"kind": "OMA",
+            "arguments":
+            [{"kind": "OMI", "integer": 0},
+             {"kind": "OMI", "integer": 1},
+             {"kind": "OMI", "integer": 0}],
+            "applicant": {"name": "vector", "kind": "OMS", "cd": "linalg3"}}],
+          "applicant":
+          {"name": "outerproduct", "kind": "OMS", "cd": "linalg1"}}],
+        "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}},
+       {"kind": "OMA",
+        "arguments":
+        [{"name": "w", "kind": "OMV"},
+         {"kind": "OMA",
+          "arguments":
+          [{"kind": "OMI", "integer": 0},
+           {"kind": "OMI", "integer": 0},
+           {"kind": "OMI", "integer": 1}],
+          "applicant": {"name": "vector", "kind": "OMS", "cd": "linalg3"}}],
+        "applicant": {"name": "outerproduct", "kind": "OMS", "cd": "linalg1"}}],
+      "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "determinant", "kind": "OMS", "cd": "linalg1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"name": "u", "kind": "OMV"},
+     {"kind": "OMA",
+      "arguments": [{"name": "v", "kind": "OMV"}, {"name": "w", "kind": "OMV"}],
+      "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "scalarproduct", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.scalar_triple_columns",
+   "context":
+   {"variables":
+    {"w": {"kind": "vector", "dimension": 3},
+     "v": {"kind": "vector", "dimension": 3},
+     "u": {"kind": "vector", "dimension": 3}},
+    "space":
+    {"orientation": "right_handed",
+     "metric": "euclidean",
+     "dimension": 3,
+     "coordinates": "standard_orthonormal_basis"},
+    "scalar_domains": ["setname1#R"]},
+   "conditions": [],
+   "application_guard": null},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments":
+      [{"kind": "OMA",
+        "arguments":
+        [{"name": "u", "kind": "OMV"}, {"name": "w", "kind": "OMV"}],
+        "applicant": {"name": "scalarproduct", "kind": "OMS", "cd": "linalg1"}},
+       {"name": "v", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+     {"kind": "OMA",
+      "arguments":
+      [{"kind": "OMA",
+        "arguments":
+        [{"name": "u", "kind": "OMV"}, {"name": "v", "kind": "OMV"}],
+        "applicant": {"name": "scalarproduct", "kind": "OMS", "cd": "linalg1"}},
+       {"name": "w", "kind": "OMV"}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "minus", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"name": "u", "kind": "OMV"},
+     {"kind": "OMA",
+      "arguments": [{"name": "v", "kind": "OMV"}, {"name": "w", "kind": "OMV"}],
+      "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.vector_triple",
+   "context":
+   {"variables":
+    {"w": {"kind": "vector", "dimension": 3},
+     "v": {"kind": "vector", "dimension": 3},
+     "u": {"kind": "vector", "dimension": 3}},
+    "space":
+    {"orientation": "right_handed",
+     "metric": "euclidean",
+     "dimension": 3,
+     "coordinates": "standard_orthonormal_basis"},
+    "scalar_domains": ["setname1#R"]},
+   "conditions": [],
+   "application_guard": null},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments": [{"kind": "OMI", "integer": 3}],
+    "applicant": {"name": "zero", "kind": "OMS", "cd": "linalg4vec"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments":
+      [{"kind": "OMA",
+        "arguments":
+        [{"name": "u", "kind": "OMV"},
+         {"kind": "OMA",
+          "arguments":
+          [{"name": "v", "kind": "OMV"}, {"name": "w", "kind": "OMV"}],
+          "applicant":
+          {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+        "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}},
+       {"kind": "OMA",
+        "arguments":
+        [{"name": "v", "kind": "OMV"},
+         {"kind": "OMA",
+          "arguments":
+          [{"name": "w", "kind": "OMV"}, {"name": "u", "kind": "OMV"}],
+          "applicant":
+          {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+        "applicant":
+        {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+      "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}},
+     {"kind": "OMA",
+      "arguments":
+      [{"name": "w", "kind": "OMV"},
+       {"kind": "OMA",
+        "arguments":
+        [{"name": "u", "kind": "OMV"}, {"name": "v", "kind": "OMV"}],
+        "applicant":
+        {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+      "applicant": {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+    "applicant": {"name": "plus", "kind": "OMS", "cd": "arith1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.cross_jacobi",
+   "context":
+   {"variables":
+    {"w": {"kind": "vector", "dimension": 3},
+     "v": {"kind": "vector", "dimension": 3},
+     "u": {"kind": "vector", "dimension": 3}},
+    "space":
+    {"orientation": "right_handed",
+     "metric": "euclidean",
+     "dimension": 3,
+     "coordinates": "standard_orthonormal_basis"},
+    "scalar_domains": ["setname1#R"]},
+   "conditions": [],
+   "application_guard": null},
+  {"replacement":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments":
+      [{"kind": "OMA",
+        "arguments":
+        [{"kind": "OMA",
+          "arguments": [{"name": "u", "kind": "OMV"}],
+          "applicant":
+          {"name": "Euclidean_norm", "kind": "OMS", "cd": "norm1"}},
+         {"kind": "OMI", "integer": 2}],
+        "applicant": {"name": "power", "kind": "OMS", "cd": "arith1"}},
+       {"kind": "OMA",
+        "arguments":
+        [{"kind": "OMA",
+          "arguments": [{"name": "v", "kind": "OMV"}],
+          "applicant":
+          {"name": "Euclidean_norm", "kind": "OMS", "cd": "norm1"}},
+         {"kind": "OMI", "integer": 2}],
+        "applicant": {"name": "power", "kind": "OMS", "cd": "arith1"}}],
+      "applicant": {"name": "times", "kind": "OMS", "cd": "arith1"}},
+     {"kind": "OMA",
+      "arguments":
+      [{"kind": "OMA",
+        "arguments":
+        [{"name": "u", "kind": "OMV"}, {"name": "v", "kind": "OMV"}],
+        "applicant": {"name": "scalarproduct", "kind": "OMS", "cd": "linalg1"}},
+       {"kind": "OMI", "integer": 2}],
+      "applicant": {"name": "power", "kind": "OMS", "cd": "arith1"}}],
+    "applicant": {"name": "minus", "kind": "OMS", "cd": "arith1"}},
+   "pattern":
+   {"kind": "OMA",
+    "arguments":
+    [{"kind": "OMA",
+      "arguments":
+      [{"kind": "OMA",
+        "arguments":
+        [{"name": "u", "kind": "OMV"}, {"name": "v", "kind": "OMV"}],
+        "applicant":
+        {"name": "vectorproduct", "kind": "OMS", "cd": "linalg1"}}],
+      "applicant": {"name": "Euclidean_norm", "kind": "OMS", "cd": "norm1"}},
+     {"kind": "OMI", "integer": 2}],
+    "applicant": {"name": "power", "kind": "OMS", "cd": "arith1"}},
+   "orientation": "forward",
+   "id": "linear_algebra.lagrange_norm",
+   "context":
+   {"variables":
+    {"v": {"kind": "vector", "dimension": 3},
+     "u": {"kind": "vector", "dimension": 3}},
+    "space":
+    {"orientation": "right_handed",
+     "metric": "euclidean",
+     "dimension": 3,
+     "coordinates": "standard_orthonormal_basis"},
+    "scalar_domains": ["setname1#R"]},
+   "conditions": [],
+   "application_guard": null}],
+ "profile": "linear_algebra.euclidean_vectors/0.1.0"}

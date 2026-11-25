@@ -3,13 +3,13 @@
 | Inventory | Count | Evidence |
 |---|---:|---|
 | Designed forward identities | 28 | All 28 have a hand-written mathematical counterpart compiled by Lean. |
-| Generated experimental examples | 11 of 28 | Typed terms supply both the proof statement and the OpenMath expressions. [Catalogue and checks](../docs/matrix-examples.md). |
+| Generated experimental examples | 17 of 28 | Eleven [matrix rewrites](../docs/matrix-examples.md) and six [vector rewrites](../docs/vector-examples.md) connect the JSON terms to their proofs. |
 | False proposals | 6 | Lean checks a concrete witness for every proposal. |
 | Exported and certified OSR v1 rules | 0 | The official typed context, registry audit and independent Verification records are pending. |
 
 The four additional formulations below cover existing catalogue entries.
 The formal verification eligibility of the eventual v1 rules depends on
-the accepted typing and registry contract. The remaining 17 identities have
+the accepted typing and registry contract. The remaining 11 identities have
 hand-written mathematical proofs only.
 
 The matrix proofs cover rectangular trace cyclicity and preserve explicit
@@ -47,8 +47,7 @@ just lean OSR-Lean
 ```
 
 CI compiles the upstream mathematical statements and the pilot sources with
-warnings treated as errors. It also regenerates the eleven experimental examples
-and compares them byte-for-byte with the committed JSON. The five new theorem declarations also check
-their axiom lists. The [numerical report](numerical.json) records five
+warnings treated as errors. It also regenerates both experimental profiles
+and compares them byte-for-byte with the committed JSON. The pilot checks its exported payloads against the axiom allowlist. The [numerical report](numerical.json) records five
 deterministic test groups. Checking that a serialized rule and its assumptions
 denote the theorem still requires the typed OSR export and independent recheck.

@@ -8,6 +8,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Six typed real Euclidean vector rewrites with checked OpenMath interpretations,
+  an order guard for cross-product antisymmetry, and a verified encoding of
+  three symbolic columns for the scalar triple product.
+
 - Experimental matrix profile 0.2.0 adds five typed rewrites for transposition
   of a scalar multiple and determinants of products, transposes, scalar multiples
   and identity matrices. The consumer checks square shapes and positive dimension

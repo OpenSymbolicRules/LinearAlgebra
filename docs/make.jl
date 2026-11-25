@@ -16,7 +16,9 @@ mktempdir() do source
     end
     cp(joinpath(repo, "reports", "numerical.json"), joinpath(source, "reports", "numerical.json"))
     mkpath(joinpath(source, "examples"))
-    cp(joinpath(repo, "examples", "matrix-identities.json"), joinpath(source, "examples", "matrix-identities.json"))
+    for file in ("matrix-identities.json", "vector-identities.json")
+        cp(joinpath(repo, "examples", file), joinpath(source, "examples", file))
+    end
     makedocs(;
         root = @__DIR__,
         source,
